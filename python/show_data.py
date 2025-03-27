@@ -26,7 +26,7 @@ thresholds = {
 }
 
 # 串口配置（根据实际情况修改端口）
-ser = serial.Serial('COM3', 9600, timeout=1)
+ser = serial.Serial('COM3', 115200, timeout=1)
 
 def parse_line(line):
     """解析传感器数据行"""
@@ -86,7 +86,7 @@ def animate(i, ax1, ax2, ax3):
     for t, val in zip(rel_times, data['voc']):
         ax1.scatter(t, val, color='red' if val > thresholds['voc'] else 'green', s=10)
     ax1.axhline(thresholds['voc'], color='r', linestyle='--', linewidth=1)
-    ax1.set_ylim(0, thresholds['voc'] * 1.5)
+    ax1.set_ylim(0, thresholds['voc'] * 7.0)
 
     # 绘制甲醛
     ax2.set_title('甲醛 实时监测')
@@ -95,7 +95,7 @@ def animate(i, ax1, ax2, ax3):
     for t, val in zip(rel_times, data['hcho']):
         ax2.scatter(t, val, color='red' if val > thresholds['hcho'] else 'green', s=10)
     ax2.axhline(thresholds['hcho'], color='r', linestyle='--', linewidth=1)
-    ax2.set_ylim(0, thresholds['hcho'] * 1.5)
+    ax2.set_ylim(0, thresholds['hcho'] * 7.0)
 
     # 绘制PM2.5
     ax3.set_title('PM2.5 实时监测')
@@ -105,7 +105,7 @@ def animate(i, ax1, ax2, ax3):
     for t, val in zip(rel_times, data['pm25']):
         ax3.scatter(t, val, color='red' if val > thresholds['pm25'] else 'green', s=10)
     ax3.axhline(thresholds['pm25'], color='r', linestyle='--', linewidth=1)
-    ax3.set_ylim(0, thresholds['pm25'] * 1.5)
+    ax3.set_ylim(0, thresholds['pm25'] * 7.0)
 
     plt.tight_layout()
     return []

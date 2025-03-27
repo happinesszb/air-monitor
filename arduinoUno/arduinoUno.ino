@@ -14,6 +14,7 @@
 #include "Arduino_ST7789.h" // Hardware-specific library for ST7789 (with or without CS pin)
 #include <SPI.h>
 #include <SoftwareSerial.h>
+#include <avr/wdt.h> // 看门狗库
 
 // TFT显示屏配置
 #define TFT_DC    8
@@ -45,7 +46,13 @@ Arduino_ST7789 tft = Arduino_ST7789(TFT_DC, TFT_RST, TFT_MOSI, TFT_SCLK); //for 
 float p = 3.1415926;
 
 void setup(void) {
-  Serial.begin(9600);       // 调试串口（电脑查看数据）
+  wdt_disable();  // 禁用看门狗
+  delay(100);     // 等待硬件稳定
+  Serial.begin(115200);
+  while (!Serial) {
+    ; // 等待串口连接[1](@ref)
+  }
+  Serial.println("System Ready");
   sensorSerial.begin(9600); // 传感器串口
   
   Serial.println("Sensor and TFT Display Test Started");
@@ -76,6 +83,7 @@ void setup(void) {
 }
 
 void loop() {
+  wdt_reset(); // 喂狗防止重启
   // 读取传感器数据
   readSensorData();
   
